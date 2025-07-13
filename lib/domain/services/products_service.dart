@@ -2,19 +2,20 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:restaurant/data/env/environment.dart';
-import 'package:restaurant/data/local_secure/secure_storage.dart';
-import 'package:restaurant/domain/models/response/images_products_response.dart';
-import 'package:restaurant/domain/models/response/products_top_home_response.dart';
-import 'package:restaurant/domain/models/response/response_default.dart';
-import 'package:restaurant/presentation/helpers/de_bouncer.dart';
+import 'package:dukascan_go/data/env/environment.dart';
+import 'package:dukascan_go/data/local_secure/secure_storage.dart';
+import 'package:dukascan_go/domain/models/product.dart';
+import 'package:dukascan_go/domain/models/response/images_products_response.dart';
+import 'package:dukascan_go/domain/models/response/products_top_home_response.dart';
+import 'package:dukascan_go/domain/models/response/response_default.dart';
+import 'package:dukascan_go/presentation/helpers/de_bouncer.dart';
 
 
-class ProductsServices {
+class ProductsService {
 
   final debouncer = DeBouncer(duration: Duration(milliseconds: 800));
-  final StreamController<List<Productsdb>> _streamController = StreamController<List<Productsdb>>.broadcast(); 
-  Stream<List<Productsdb>> get searchProducts => _streamController.stream;
+  final StreamController<List<Product>> _streamController = StreamController<List<Product>>.broadcast();
+  Stream<List<Product>> get searchProducts => _streamController.stream;
 
   void dispose() {
     _streamController.close();
@@ -42,7 +43,7 @@ class ProductsServices {
   }
 
 
-  Future<List<Productsdb>> getProductsTopHome() async {
+  Future<List<Product>> getProductsTopHome() async {
 
     final token = await secureStorage.readToken();
 
@@ -50,7 +51,7 @@ class ProductsServices {
       headers: {'Accept' : 'application/json', 'xx-token' : token!}
     );
 
-    return ProductsTopHomeResponse.fromJson(jsonDecode(response.body)).productsdb;
+    return ProductsTopHomeResponse.fromJson(jsonDecode(response.body)).products;
   }
 
 
@@ -77,7 +78,7 @@ class ProductsServices {
         headers: { 'Accept' :  'application/json', 'xx-token' : token! }
       );
 
-      final listProduct =  ProductsTopHomeResponse.fromJson( jsonDecode( response.body) ).productsdb;
+      final listProduct =  ProductsTopHomeResponse.fromJson( jsonDecode( response.body) ).products;
 
       this._streamController.add(listProduct);
 
@@ -88,7 +89,7 @@ class ProductsServices {
   }
 
 
-  Future<List<Productsdb>> searchPorductsForCategory(String idCategory) async {
+  Future<List<Product>> searchPorductsForCategory(String idCategory) async {
 
     final token = await secureStorage.readToken();
 
@@ -96,11 +97,11 @@ class ProductsServices {
       headers: {'Accept' : 'application/json', 'xx-token' : token!}
     );
 
-    return ProductsTopHomeResponse.fromJson(jsonDecode(resp.body)).productsdb;
+    return ProductsTopHomeResponse.fromJson(jsonDecode(resp.body)).products;
   }
 
 
-  Future<List<Productsdb>> listProductsAdmin() async {
+  Future<List<Product>> listProductsAdmin() async {
 
     final token = await secureStorage.readToken();
 
@@ -108,7 +109,7 @@ class ProductsServices {
       headers: {'Content-Type' : 'application/json', 'xx-token' : token!}
     );
 
-    return ProductsTopHomeResponse.fromJson(jsonDecode(resp.body)).productsdb;
+    return ProductsTopHomeResponse.fromJson(jsonDecode(resp.body)).products;
   }
 
 
@@ -139,9 +140,31 @@ class ProductsServices {
     return ResponseDefault.fromJson(jsonDecode(resp.body));
   }
 
+  Future<List<Product>> getProductsByStore(String storeId) async {
+    final token = await secureStorage.readToken();
+    final response = await http.get(
+      Uri.parse('${Environment.endpointApi}/products/store/$storeId'),
+      headers: {'Accept': 'application/json', 'xx-token': token!},
+    );
+    if (response.statusCode == 200) {
+      return ProductsTopHomeResponse.fromJson(jsonDecode(response.body)).products;
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
 
-
-
+  Future<Product> getProductByBarcode(String barcode, String storeId) async {
+    final token = await secureStorage.readToken();
+    final response = await http.get(
+      Uri.parse('${Environment.endpointApi}/products/barcode/$barcode/store/$storeId'),
+      headers: {'Accept': 'application/json', 'xx-token': token!},
+    );
+    if (response.statusCode == 200) {
+      return Product.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load product');
+    }
+  }
 }
 
-final productServices = ProductsServices();
+final productServices = ProductsService();

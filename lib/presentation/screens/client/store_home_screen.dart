@@ -1,34 +1,33 @@
 import 'package:flutter/material.dart';
-
 import 'package:dukascan_go/domain/models/product.dart';
-import 'package:dukascan_go/domain/services/store_services.dart';
+import 'package:dukascan_go/domain/models/store.dart';
+import 'package:dukascan_go/domain/services/products_services.dart';
 import 'package:dukascan_go/presentation/screens/client/product_scanning_screen.dart';
-import 'package:flutter/material.dart';
 
 class StoreHomeScreen extends StatefulWidget {
-  final String? storeId;
+  final Store store;
 
-  const StoreHomeScreen({required this.storeId});
+  const StoreHomeScreen({required this.store});
 
   @override
   _StoreHomeScreenState createState() => _StoreHomeScreenState();
 }
 
 class _StoreHomeScreenState extends State<StoreHomeScreen> {
-  final StoreService _storeService = StoreService();
+  final ProductsService _productsService = ProductsService();
   late Future<List<Product>> _productsFuture;
 
   @override
   void initState() {
     super.initState();
-    _productsFuture = _storeService.getProducts(widget.storeId!);
+    _productsFuture = _productsService.getProductsByStore(widget.store.id);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Store ${widget.storeId}'),
+        title: Text(widget.store.name),
       ),
       body: FutureBuilder<List<Product>>(
         future: _productsFuture,
@@ -58,11 +57,11 @@ class _StoreHomeScreenState extends State<StoreHomeScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductScanningScreen(),
+              builder: (context) => ProductScanningScreen(storeId: widget.store.id),
             ),
           );
         },
-        child: Icon(Icons.add_shopping_cart),
+        child: Icon(Icons.qr_code_scanner),
       ),
     );
   }
