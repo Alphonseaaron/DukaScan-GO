@@ -1,5 +1,5 @@
-name: restaurant
-description: Fraved Restaurante Copyright 2022
+name: dukascan_go
+description: DukaScanGo - Full System Implementation
 
 publish_to: 'none'
 
@@ -35,6 +35,14 @@ dependencies:
   firebase_messaging: ^14.4.1
   firebase_core: ^2.10.0
   flutter_local_notifications: ^14.0.0+1
+  firebase_auth: ^4.4.2
+  cloud_firestore: ^4.5.2
+  firebase_storage: ^11.1.2
+  qr_code_scanner: ^1.0.1
+  flutter_stripe: ^9.0.0
+  google_sign_in: ^6.1.0
+  flutter_facebook_auth: ^5.0.11
+  qr_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -68,4 +76,3 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
-

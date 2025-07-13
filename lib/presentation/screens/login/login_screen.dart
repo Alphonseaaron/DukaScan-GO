@@ -163,7 +163,25 @@ class _LoginScreenState extends State<LoginScreen> {
     
                     }
                   },
-                )
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        await authServices.googleLogin();
+                      },
+                      icon: FaIcon(FontAwesomeIcons.google),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        await authServices.facebookLogin();
+                      },
+                      icon: FaIcon(FontAwesomeIcons.facebook),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

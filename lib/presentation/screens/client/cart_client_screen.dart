@@ -81,12 +81,7 @@ class CartClientScreen extends StatelessWidget {
                                     Container(
                                       width: 100,
                                       padding: const EdgeInsets.all(5.0),
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          scale: 8,
-                                          image: NetworkImage('${Environment.endpointBase}${state.products![i].imageProduct}')
-                                        )
-                                      ),
+                                      child: Image.network(state.products![i].image, height: 80, width: 80),
                                     ),
                                     Container(
                                       width: 130,
@@ -95,7 +90,7 @@ class CartClientScreen extends StatelessWidget {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          TextCustom(text: state.products![i].nameProduct, fontWeight: FontWeight.w500, fontSize: 20),
+                                          TextCustom(text: state.products![i].name, fontWeight: FontWeight.w500, fontSize: 20),
                                           const SizedBox(height: 10.0),
                                           TextCustom(text: '\$ ${state.products![i].price * state.products![i].quantity}', color: ColorsFrave.primaryColor )
                                         ],
@@ -186,7 +181,7 @@ class CartClientScreen extends StatelessWidget {
                         color: (state.quantityCart != 0) ? ColorsFrave.primaryColor : ColorsFrave.secundaryColor,
                         onPressed: (){
                           if ( state.quantityCart != 0 ){
-                            Navigator.push(context, routeFrave(page: CheckOutScreen()));
+                            Navigator.push(context, routeFrave(page: CheckoutScreen()));
                           }
                         },
                       )

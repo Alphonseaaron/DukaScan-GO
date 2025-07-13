@@ -51,25 +51,18 @@ class _CheckingLoginScreenState extends State<CheckingLoginScreen> with TickerPr
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         
-        if( state is LoadingAuthState ){
+        if (state is LogOutAuthState) {
+          Navigator.pushAndRemoveUntil(
+              context, routeFrave(page: ClientHomeScreen()), (route) => false);
+        } else if (state.rolId != '') {
+          userBloc.add(OnGetUserEvent(state.user!));
 
-          Navigator.pushReplacement(context, routeFrave(page: CheckingLoginScreen()));
-        
-        } else if ( state is LogOutAuthState ){
-
-          Navigator.pushAndRemoveUntil(context, routeFrave(page: LoginScreen()), (route) => false);    
-         
-        } else if ( state.rolId != '' ){
-
-          userBloc.add( OnGetUserEvent(state.user!) );
-
-          if( state.rolId  == '1' || state.rolId  == '3' ){
-
-            Navigator.pushAndRemoveUntil(context, routeFrave(page: SelectRoleScreen()), (route) => false);
-          
-           } else if ( state.rolId  == '2' ){
-
-            Navigator.pushAndRemoveUntil(context, routeFrave(page: ClientHomeScreen()), (route) => false);          
+          if (state.rolId == '1' || state.rolId == '3') {
+            Navigator.pushAndRemoveUntil(
+                context, routeFrave(page: SelectRoleScreen()), (route) => false);
+          } else if (state.rolId == '2') {
+            Navigator.pushAndRemoveUntil(
+                context, routeFrave(page: ClientHomeScreen()), (route) => false);
           }
         }
       },
