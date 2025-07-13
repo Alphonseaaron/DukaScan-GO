@@ -1,81 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:restaurant/domain/models/response/orders_by_status_response.dart';
-import 'package:restaurant/domain/services/services.dart';
-import 'package:restaurant/presentation/components/card_orders_delivery.dart';
-import 'package:restaurant/presentation/components/components.dart';
-import 'package:restaurant/presentation/screens/delivery/order_details_delivery_screen.dart';
-import 'package:restaurant/presentation/themes/colors_frave.dart';
+import 'package:dukascan_go/domain/models/order.dart';
+import 'package:dukascan_go/domain/services/order_services.dart';
+import 'package:dukascan_go/presentation/screens/delivery/order_details_delivery_screen.dart';
 
-
-class ListOrdersDeliveryScreen extends StatelessWidget {
-
+class ListOrdersDeliveryScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context){
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const TextCustom(text: 'List of orders'),
-        centerTitle: true,
-        elevation: 0,
-        leadingWidth: 80,
-        leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.arrow_back_ios_new_rounded, size: 19, color: ColorsFrave.primaryColor ),
-              TextCustom(text: 'Back', fontSize: 17, color: ColorsFrave.primaryColor )
-            ],
-          ),
-        ),
-      ),
-      body: FutureBuilder<List<OrdersResponse>>(
-        future: deliveryServices.getOrdersForDelivery('DISPATCHED'),
-        builder: (context, snapshot) 
-          => ( !snapshot.hasData )
-            ? Column(
-                children: const [
-                  ShimmerFrave(),
-                  SizedBox(height: 10.0),
-                  ShimmerFrave(),
-                  SizedBox(height: 10.0),
-                  ShimmerFrave(),
-                ],
-              )
-            : _ListOrdersForDelivery(listOrdersDelivery: snapshot.data!)
-      ),
-    );
-  }
+  _ListOrdersDeliveryScreenState createState() =>
+      _ListOrdersDeliveryScreenState();
 }
 
-class _ListOrdersForDelivery extends StatelessWidget {
-  
-  final List<OrdersResponse> listOrdersDelivery;
+class _ListOrdersDeliveryScreenState extends State<ListOrdersDeliveryScreen> {
+  final OrderService _orderService = OrderService();
+  late Future<List<Order>> _ordersFuture;
 
-  const _ListOrdersForDelivery({ required this.listOrdersDelivery});
+  @override
+  void initState() {
+    super.initState();
+    _ordersFuture = _orderService.getAvailableOrders();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ( listOrdersDelivery.length != 0 ) 
-      ? ListView.builder(
-          itemCount: listOrdersDelivery.length,
-          itemBuilder: (_, i) 
-            => CardOrdersDelivery(
-                orderResponse: listOrdersDelivery[i],
-                onPressed: () => Navigator.push(context, routeFrave(page: OrdersDetailsDeliveryScreen(order: listOrdersDelivery[i]))),
-               )
-        )
-      : Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(child: SvgPicture.asset('Assets/no-data.svg', height: 300)),
-          const SizedBox(height: 15.0),
-          const TextCustom(text: 'Without Orders', color: ColorsFrave.primaryColor, fontWeight: FontWeight.w500, fontSize: 21)
-        ],
-      );
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Available Gigs'),
+      ),
+      body: FutureBuilder<List<Order>>(
+        future: _ordersFuture,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          final orders = snapshot.data!;
+          return ListView.builder(
+            itemCount: orders.length,
+            itemBuilder: (context, index) {
+              final order = orders[index];
+              return ListTile(
+                title: Text('Order #${order.id}'),
+                subtitle: Text('Total: \$${order.total}'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          OrderDetailsDeliveryScreen(order: order),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }
