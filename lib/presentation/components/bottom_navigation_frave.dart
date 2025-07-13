@@ -9,8 +9,9 @@ import 'package:restaurant/presentation/themes/colors_frave.dart';
 class BottomNavigationFrave extends StatelessWidget {
 
   final int index;
+  final ValueChanged<int> onChanged;
 
-  BottomNavigationFrave(this.index);
+  BottomNavigationFrave({required this.index, required this.onChanged});
 
   @override
   Widget build(BuildContext context){
@@ -32,28 +33,28 @@ class BottomNavigationFrave extends StatelessWidget {
             index: index, 
             iconData: Icons.home_outlined, 
             text: 'Home',
-            onPressed: () => Navigator.pushReplacement(context, routeFrave(page: ClientHomeScreen())),
+            onPressed: () => onChanged(0),
             ),
           _ItemButton(
             i: 1, 
             index: index, 
-            iconData: Icons.search, 
-            text: 'Search',
-            onPressed: () => Navigator.pushReplacement(context, routeFrave(page: SearchClientScreen())),
+            iconData: Icons.qr_code_scanner_outlined,
+            text: 'Scan',
+            onPressed: () => onChanged(1),
             ),
           _ItemButton(
             i: 2, 
             index: index, 
-            iconData: Icons.local_mall_outlined, 
-            text: 'Cart',
-            onPressed: () => Navigator.pushReplacement(context, routeFrave(page: CartClientScreen())),
+            iconData: Icons.shopping_bag_outlined,
+            text: 'Orders',
+            onPressed: () => onChanged(2),
           ),
           _ItemButton(
             i: 3, 
             index: index, 
             iconData: Icons.person_outline_outlined, 
             text: 'Profile',
-            onPressed: () => Navigator.pushReplacement(context, routeFrave(page: ProfileClientScreen())),
+            onPressed: () => onChanged(3),
             ),
         ],
       )

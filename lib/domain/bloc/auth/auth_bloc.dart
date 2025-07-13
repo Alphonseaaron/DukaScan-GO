@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:restaurant/data/local_secure/secure_storage.dart';
-import 'package:restaurant/domain/services/auth_Services.dart';
-import 'package:restaurant/domain/services/user_services.dart';
-import '../../models/response/response_login.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:dukascan_go/domain/services/auth_Services.dart';
+import 'package:dukascan_go/domain/models/response/response_login.dart';
 
 
 part 'auth_event.dart';
@@ -33,13 +32,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       if( data.resp ){
 
-        await secureStorage.deleteSecureStorage();
+        final user = User.fromFirebase(data.user!);
 
-        await secureStorage.persistenToken(data.token);
-
-        await userServices.updateNotificationToken();
-
-        emit( state.copyWith(user: data.user, rolId: data.user.rolId.toString()));
+        emit( state.copyWith(user: user, rolId: user.rolId.toString()));
 
       } else {
         emit(FailureAuthState(data.msg));
@@ -58,22 +53,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit( LoadingAuthState() );
 
-      if( await secureStorage.readToken() != null ) {
+      final data = await authServices.renewLoginController();
 
-        final data = await authServices.renewLoginController();
+      if( data.resp ){
 
-        if( data.resp ){
+        final user = User.fromFirebase(data.user!);
 
-          await secureStorage.persistenToken(data.token);
-
-          emit( state.copyWith(user: data.user, rolId: data.user.rolId.toString() ));
-        
-        }else{
-          emit(LogOutAuthState());
-        }
+        emit( state.copyWith(user: user, rolId: user.rolId.toString() ));
 
       }else{
-        emit( LogOutAuthState());
+        emit(LogOutAuthState());
       }
       
     } catch (e) {
@@ -85,7 +74,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onLogOut(LogOutEvent event, Emitter<AuthState> emit) async {
 
-    await secureStorage.deleteSecureStorage();
+    await FirebaseAuth.instance.signOut();
     emit( LogOutAuthState() );
     return emit( state.copyWith( user: null, rolId: ''));
 

@@ -1,58 +1,46 @@
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 
 class ResponseLogin {
 
   final bool resp;
   final String msg;
-  final User user;
-  final String token;
+  final firebase.User? user;
 
   ResponseLogin({
     required this.resp,
     required this.msg,
-    required this.token,
-    required this.user,
+    this.user,
   });
-
-  factory ResponseLogin.fromJson(Map<String, dynamic> json) => ResponseLogin(
-    resp: json["resp"],
-    msg: json["msg"],
-    user: User.fromJson(json["user"] ?? {}),
-    token: json["token"] ?? '',
-  );
 
 }
 
 class User {
     
-  final int uid;
-  final String firstName;
-  final String lastName;
-  final String image;
-  final String email;
-  final String phone;
-  final int rolId;
-  final String notificationToken;
+  final String uid;
+  final String? firstName;
+  final String? lastName;
+  final String? image;
+  final String? email;
+  final String? phone;
+  final int? rolId;
+  final String? notificationToken;
 
   User({
     required this.uid,
-    required this.firstName,
-    required this.lastName,
-    required this.phone,
-    required this.image,
-    required this.email,
-    required this.rolId,
-    required this.notificationToken
+    this.firstName,
+    this.lastName,
+    this.phone,
+    this.image,
+    this.email,
+    this.rolId,
+    this.notificationToken
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-    uid: json["uid"] ?? 0,
-    firstName: json["firstName"] ?? '',
-    lastName: json["lastName"] ?? '',
-    phone: json["phone"] ?? '',
-    image: json["image"] ?? '',
-    email: json["email"] ?? '',
-    rolId: json["rol_id"] ?? 0,
-    notificationToken: json["notification_token"] ?? ''
+  factory User.fromFirebase(firebase.User user) => User(
+    uid: user.uid,
+    firstName: user.displayName,
+    email: user.email,
+    image: user.photoURL,
   );
 
 }

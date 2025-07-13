@@ -1,6 +1,5 @@
 
 class ProductCart {
-
   String uidProduct;
   String imageProduct;
   String nameProduct;
@@ -12,15 +11,24 @@ class ProductCart {
     required this.imageProduct,
     required this.nameProduct,
     required this.price,
-    required this.quantity
+    required this.quantity,
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
-      "uidProduct" : this.uidProduct,
-      "price" : this.price,
-      "quantity" : this.quantity
+      'uidProduct': uidProduct,
+      'imageProduct': imageProduct,
+      'nameProduct': nameProduct,
+      'price': price,
+      'quantity': quantity,
     };
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      "uidProduct": this.uidProduct,
+      "price": this.price,
+      "quantity": this.quantity
+    };
+  }
 }
