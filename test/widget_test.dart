@@ -1,30 +1,35 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:restaurant/main.dart';
+import 'package:restaurant/presentation/screens/client/client_home_screen.dart';
+import 'package:restaurant/presentation/screens/store_owner/store_owner_home_screen.dart';
+import 'package:restaurant/presentation/screens/wholesaler/wholesaler_home_screen.dart';
+import 'package:restaurant/presentation/screens/delivery_agent/delivery_agent_home_screen.dart';
+import 'package:restaurant/presentation/screens/super_admin/super_admin_home_screen.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  testWidgets('Client home screen test', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: ClientHomeScreen()));
+    expect(find.text('What do you want eat today?'), findsOneWidget);
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('Store owner home screen test', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: StoreOwnerHomeScreen()));
+    expect(find.text('Welcome, Store Owner!'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('Wholesaler home screen test', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: WholesalerHomeScreen()));
+    expect(find.text('Welcome, Wholesaler!'), findsOneWidget);
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('Delivery agent home screen test', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: DeliveryAgentHomeScreen()));
+    expect(find.text('Welcome, Delivery Agent!'), findsOneWidget);
+  });
+
+  testWidgets('Super admin home screen test', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: SuperAdminHomeScreen()));
+    expect(find.text('Welcome, Super Admin!'), findsOneWidget);
   });
 }
