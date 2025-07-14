@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dukascan_go/presentation/screens/wholesaler/products/wholesaler_product_screen.dart';
 import 'package:dukascan_go/presentation/screens/wholesaler/orders/wholesaler_order_screen.dart';
+import 'package:dukascan_go/presentation/screens/wholesaler/pos/wholesaler_pos_screen.dart';
+import 'package:dukascan_go/presentation/screens/wholesaler/components/wholesaler_home_card.dart';
 
 class WholesalerHomeScreen extends StatelessWidget {
   @override
@@ -11,8 +13,19 @@ class WholesalerHomeScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          ListTile(
-            title: Text('Products'),
+          WholesalerHomeCard(
+            title: 'POS',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => WholesalerPosScreen(),
+                ),
+              );
+            },
+          ),
+          WholesalerHomeCard(
+            title: 'Products',
             onTap: () {
               Navigator.push(
                 context,
@@ -22,8 +35,8 @@ class WholesalerHomeScreen extends StatelessWidget {
               );
             },
           ),
-          ListTile(
-            title: Text('Orders'),
+          WholesalerHomeCard(
+            title: 'Orders',
             onTap: () {
               Navigator.push(
                 context,
