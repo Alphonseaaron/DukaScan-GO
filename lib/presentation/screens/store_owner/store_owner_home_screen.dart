@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:dukascan_go/presentation/screens/store_owner/inventory/inventory_management_screen.dart';
 import 'package:dukascan_go/presentation/screens/store_owner/orders/order_management_screen.dart';
 import 'package:dukascan_go/presentation/screens/store_owner/reports/financial_reports_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:dukascan_go/presentation/screens/store_owner/dashboard/store_owner_dashboard_screen.dart';
 
 class StoreOwnerHomeScreen extends StatelessWidget {
   @override
@@ -14,6 +13,17 @@ class StoreOwnerHomeScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
+          ListTile(
+            title: Text('Dashboard'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => StoreOwnerDashboardScreen(),
+                ),
+              );
+            },
+          ),
           ListTile(
             title: Text('Inventory Management'),
             onTap: () {
