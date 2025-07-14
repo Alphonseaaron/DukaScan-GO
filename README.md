@@ -63,7 +63,11 @@ DukaScanGo is a comprehensive, multi-faceted platform revolutionizing the retail
    ```sh
    flutter pub get
    ```
-3. Run the app
+3. Add your Flutterwave API keys in `lib/main.dart`
+   ```dart
+   Flutterwave.publishableKey = 'YOUR_FLUTTERWAVE_PUBLISHABLE_KEY';
+   ```
+4. Run the app
    ```sh
    flutter run
    ```
