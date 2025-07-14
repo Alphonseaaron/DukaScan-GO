@@ -20,7 +20,7 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // Stripe.publishableKey = 'your_stripe_publishable_key'; // TODO: Replace with your Stripe publishable key
+  // Flutterwave.publishableKey = 'your_flutterwave_publishable_key'; // TODO: Replace with your Flutterwave publishable key
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackground);
   pushNotification.initNotifacion();
   runApp(MyApp());
