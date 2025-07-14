@@ -3,6 +3,7 @@ import 'package:dukascan_go/presentation/screens/store_owner/inventory/inventory
 import 'package:dukascan_go/presentation/screens/store_owner/orders/order_management_screen.dart';
 import 'package:dukascan_go/presentation/screens/store_owner/reports/financial_reports_screen.dart';
 import 'package:dukascan_go/presentation/screens/store_owner/dashboard/store_owner_dashboard_screen.dart';
+import 'package:dukascan_go/presentation/components/custom_card.dart';
 
 class StoreOwnerHomeScreen extends StatelessWidget {
   @override
@@ -13,8 +14,8 @@ class StoreOwnerHomeScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          ListTile(
-            title: Text('Dashboard'),
+          CustomCard(
+            title: 'Dashboard',
             onTap: () {
               Navigator.push(
                 context,
@@ -24,8 +25,8 @@ class StoreOwnerHomeScreen extends StatelessWidget {
               );
             },
           ),
-          ListTile(
-            title: Text('Inventory Management'),
+          CustomCard(
+            title: 'Inventory Management',
             onTap: () {
               Navigator.push(
                 context,
@@ -35,8 +36,8 @@ class StoreOwnerHomeScreen extends StatelessWidget {
               );
             },
           ),
-          ListTile(
-            title: Text('Order Management'),
+          CustomCard(
+            title: 'Order Management',
             onTap: () {
               Navigator.push(
                 context,
@@ -46,8 +47,8 @@ class StoreOwnerHomeScreen extends StatelessWidget {
               );
             },
           ),
-          ListTile(
-            title: Text('Financial Reports'),
+          CustomCard(
+            title: 'Financial Reports',
             onTap: () {
               Navigator.push(
                 context,
